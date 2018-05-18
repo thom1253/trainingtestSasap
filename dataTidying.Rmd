@@ -16,25 +16,23 @@ library(tidyr)
 
 ```
 
+# load and tidy data
 ```{r load_data}
 catch_df <- read.csv(url("https://knb.ecoinformatics.org/knb/d1/mn/v2/object/df35b.302.1", method = "libcurl"), stringsAsFactors = FALSE)
 ```
 
 Change from wide to long form, delete a few unnecessary cols, rename
-
 ```{r select }
 catch_df<-catch_df %>%
   select(-All, -notesRegCode) %>%
   gather(key = "Species", value = catch, -Region, -Year) %>%
   rename(catch_thousands = catch)
-  
 ```
 
 A not-run example ofr how to go from long to wide
 ```{r To_WidewSpread, eval = FALSE}
 catch_df %>%
   spread(key = "Species", value = catch)
-  
 ```
 
 
@@ -44,10 +42,25 @@ catch_df <- catch_df %>%
   mutate(catch_thousands = ifelse(catch_thousands == "I", 1, catch_thousands)) %>%
   mutate(catch_thousands = as.integer(catch_thousands)) %>%
   mutate(catch = catch_thousands*1000)
-
 ```
 
-```{r groupby}
+# Analysis
+chinook catch by 
+
+```{r summarize}
+annual_catch <- catch_df %>%
+  filter(Species == "Chinook") %>%
+  group_by(Year) %>%
+  summarize(meanCatch = mean(catch)) %>%
+  arrange(desc(meanCatch))
+
+head(annual_catch, 30)
+```
+
+filterign
+```{r}
+Chinook<-catch_df %>%
+  filter(Species == Chinook)
 
 ```
 
