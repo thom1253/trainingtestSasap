@@ -1,0 +1,53 @@
+---
+title: "dataTidying"
+author: "Sarah"
+date: "May 17, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r load_libraries, message =FALSE, warning=FALSE, echo = FALSE}
+library(dplyr)
+library(tidyr)
+
+```
+
+```{r load_data}
+catch_df <- read.csv(url("https://knb.ecoinformatics.org/knb/d1/mn/v2/object/df35b.302.1", method = "libcurl"), stringsAsFactors = FALSE)
+```
+
+Change from wide to long form, delete a few unnecessary cols, rename
+
+```{r select }
+catch_df<-catch_df %>%
+  select(-All, -notesRegCode) %>%
+  gather(key = "Species", value = catch, -Region, -Year) %>%
+  rename(catch_thousands = catch)
+  
+```
+
+A not-run example ofr how to go from long to wide
+```{r To_WidewSpread, eval = FALSE}
+catch_df %>%
+  spread(key = "Species", value = catch)
+  
+```
+
+
+Fixing some variables
+```{r fix_Error_new_var}
+catch_df <- catch_df %>%
+  mutate(catch_thousands = ifelse(catch_thousands == "I", 1, catch_thousands)) %>%
+  mutate(catch_thousands = as.integer(catch_thousands)) %>%
+  mutate(catch = catch_thousands*1000)
+
+```
+
+```{r groupby}
+
+```
+
