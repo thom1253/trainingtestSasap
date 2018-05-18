@@ -1,0 +1,20 @@
+---
+title: "newdoctoGIT"
+author: "Sarah"
+date: "May 17, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+practice practice
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
